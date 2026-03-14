@@ -340,6 +340,11 @@ const Storage = {
         return categories.find(c => c.id === id);
     },
     
+    getTodoById(id) {
+        const todos = this.getTodos();
+        return todos.find(t => t.id === id);
+    },
+    
     // ==================== 负责人相关 ====================
     
     getResponsibles() {

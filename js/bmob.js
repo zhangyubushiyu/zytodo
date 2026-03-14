@@ -7,6 +7,8 @@ const BmobService = {
         try {
             if (!this.initialized) {
                 Bmob.initialize(this.secretKey, this.apiSecurityCode);
+                // 设置超时时间为30秒
+                Bmob.timeout = 30000;
                 this.initialized = true;
                 console.log('Bmob 初始化成功');
             }
