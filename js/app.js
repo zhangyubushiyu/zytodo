@@ -22,6 +22,7 @@ const App = {
         iOSModal.init();
         CustomSelect.initAll();
         TimeSelect.initAll();
+        MobileNav.init();
         
         this.bindEvents();
         this.updateLayout();

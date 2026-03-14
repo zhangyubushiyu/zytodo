@@ -2292,4 +2292,431 @@ body {
     padding: 0 0 8px 0;
     border-bottom: 1px solid #E5E5EA;
 }
+
+/* ========== 响应式设计 - 手机端适配 ========== */
+
+/* 平板设备 */
+@media screen and (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+    }
+    
+    .calendar-section {
+        flex: 0 0 auto;
+        min-height: 50vh;
+        padding: 15px;
+    }
+    
+    .sidebar {
+        flex: 0 0 auto;
+        width: 100%;
+        max-height: 50vh;
+    }
+    
+    .toggle-btn {
+        display: none;
+    }
+}
+
+/* 手机设备 */
+@media screen and (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .calendar-section {
+        flex: 0 0 auto;
+        min-height: auto;
+        padding: 10px;
+        padding-bottom: 0;
+    }
+    
+    .calendar-section.hidden {
+        display: none;
+    }
+    
+    .calendar-header {
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+    
+    .calendar-header h2 {
+        font-size: 18px;
+        min-width: auto;
+        order: 1;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .nav-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+        order: 2;
+    }
+    
+    .today-btn, .view-toggle-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+        order: 3;
+    }
+    
+    .calendar-grid {
+        padding: 10px;
+    }
+    
+    .calendar-weekdays div {
+        padding: 6px 4px;
+        font-size: 11px;
+    }
+    
+    .calendar-day {
+        min-height: 60px;
+        padding: 6px;
+        border-radius: 8px;
+    }
+    
+    .day-number {
+        font-size: 14px;
+    }
+    
+    .day-stats {
+        font-size: 10px;
+    }
+    
+    .day-todo-item {
+        font-size: 9px;
+        padding: 2px 4px;
+    }
+    
+    .sidebar {
+        width: 100%;
+        max-height: none;
+        border-left: none;
+        border-top: 1px solid #E5E5EA;
+    }
+    
+    .sidebar.hidden {
+        display: none;
+    }
+    
+    .quick-add-section {
+        padding: 15px;
+    }
+    
+    .quick-add-section h3 {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+    
+    .form-group {
+        margin-bottom: 10px;
+    }
+    
+    .form-group label {
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+    
+    .btn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+    
+    .day-detail {
+        padding: 15px;
+    }
+    
+    .day-detail-header {
+        padding: 12px 15px;
+    }
+    
+    .day-detail-header h3 {
+        font-size: 16px;
+    }
+    
+    .todo-item {
+        padding: 10px;
+        margin-bottom: 8px;
+    }
+    
+    .todo-item-title {
+        font-size: 14px;
+    }
+    
+    .todo-item-meta {
+        font-size: 12px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        max-width: none;
+        max-height: 90vh;
+        margin: 5vh auto;
+        padding: 15px;
+    }
+    
+    .modal-header {
+        padding: 12px 15px;
+    }
+    
+    .modal-header h3 {
+        font-size: 16px;
+    }
+    
+    .modal-body {
+        padding: 15px;
+        max-height: calc(90vh - 120px);
+    }
+    
+    .modal-footer {
+        padding: 12px 15px;
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+    }
+    
+    .notification {
+        width: calc(100% - 20px);
+        left: 10px;
+        right: 10px;
+        padding: 12px 15px;
+        font-size: 13px;
+    }
+    
+    .header-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .header-actions .btn {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+    
+    .list-item {
+        padding: 10px;
+    }
+    
+    .list-item-info {
+        font-size: 14px;
+    }
+    
+    .list-item-actions {
+        gap: 6px;
+    }
+    
+    .list-item-actions button {
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+    
+    .color-badge {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .drag-handle {
+        font-size: 14px;
+    }
+    
+    .calendar-days.week-mode {
+        flex-direction: column;
+    }
+    
+    .calendar-days.week-mode .calendar-day {
+        min-height: 80px;
+    }
+    
+    .toggle-btn {
+        display: none !important;
+    }
+    
+    .mobile-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #FFFFFF;
+        border-top: 1px solid #E5E5EA;
+        padding: 8px 0;
+        z-index: var(--z-index-fixed);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .mobile-nav-btn {
+        flex: 1;
+        background: none;
+        border: none;
+        padding: 8px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        color: #8E8E93;
+        font-size: 11px;
+        transition: all 0.2s ease;
+    }
+    
+    .mobile-nav-btn.active {
+        color: #007AFF;
+    }
+    
+    .mobile-nav-btn i {
+        font-size: 20px;
+    }
+    
+    body {
+        padding-bottom: 60px;
+    }
+}
+
+/* 小屏手机 */
+@media screen and (max-width: 480px) {
+    .calendar-header {
+        padding: 10px;
+    }
+    
+    .calendar-header h2 {
+        font-size: 16px;
+    }
+    
+    .nav-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+    
+    .today-btn, .view-toggle-btn {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+    
+    .calendar-day {
+        min-height: 50px;
+        padding: 4px;
+    }
+    
+    .day-number {
+        font-size: 12px;
+    }
+    
+    .day-stats {
+        font-size: 9px;
+    }
+    
+    .day-todo-item {
+        font-size: 8px;
+        padding: 1px 3px;
+        margin-bottom: 1px;
+    }
+    
+    .quick-add-section {
+        padding: 10px;
+    }
+    
+    .quick-add-section h3 {
+        font-size: 14px;
+    }
+    
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 13px;
+        padding: 6px 8px;
+    }
+    
+    .btn {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+    
+    .modal-content {
+        width: 100%;
+        margin: 0;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+    
+    .modal-body {
+        max-height: calc(100vh - 100px);
+    }
+}
+
+/* 横屏手机 */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    .container {
+        flex-direction: row;
+    }
+    
+    .calendar-section {
+        flex: 1;
+        min-height: 100vh;
+    }
+    
+    .sidebar {
+        flex: 1;
+        max-height: 100vh;
+    }
+    
+    .calendar-day {
+        min-height: 80px;
+    }
+}
+
+/* 高分辨率手机 */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        flex-direction: row;
+    }
+    
+    .calendar-section {
+        flex: 1;
+    }
+    
+    .sidebar {
+        flex: 0 0 350px;
+    }
+}
+
+/* 打印样式 */
+@media print {
+    .toggle-btn,
+    .mobile-nav,
+    .quick-add-section,
+    .modal {
+        display: none !important;
+    }
+    
+    .container {
+        height: auto;
+    }
+    
+    .calendar-section,
+    .sidebar {
+        display: block;
+        width: 100%;
+    }
+}
+}
 EOF~
