@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="团队待办管理系统 - 高效管理团队工作事项">
+    <meta name="theme-color" content="#007AFF">
+    <title>团队待办管理系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- 引入Bmob SDK -->
+    <script src="https://unpkg.com/hydrogen-js-sdk@2.2.1/dist/Bmob-2.2.1.min.js"></script>
+</head>
+<body role="application">
+    <div class="container" role="main">
+        <div class="calendar-section" id="calendarSection" role="region" aria-label="日历区域">
+            <button class="toggle-btn toggle-calendar" id="toggleCalendar" title="隐藏日历" aria-label="切换日历显示">◀</button>
+            <div class="calendar-header" role="banner">
+                <button class="nav-btn" id="prevMonth" aria-label="上一月">&lt;</button>
+                <h2 id="currentMonth" aria-live="polite"></h2>
+                <button class="nav-btn" id="nextMonth" aria-label="下一月">&gt;</button>
+                <button class="today-btn" id="todayBtn" aria-label="跳转到今天">今天</button>
+                <button class="view-toggle-btn" id="viewToggleBtn" aria-label="切换视图模式">月视图</button>
+            </div>
+            <div class="calendar-grid" id="calendarGrid" role="grid" aria-label="日历网格">
+                <div class="calendar-weekdays" role="row">
+                    <div role="columnheader">日</div>
+                    <div role="columnheader">一</div>
+                    <div role="columnheader">二</div>
+                    <div role="columnheader">三</div>
+                    <div role="columnheader">四</div>
+                    <div role="columnheader">五</div>
+                    <div role="columnheader">六</div>
+                </div>
+                <div class="calendar-days" id="calendarDays" role="rowgroup"></div>
+            </div>
+        </div>
+        
+        <div class="todo-section" id="todoSection" role="region" aria-label="待办事项">
+            <div class="todo-header" role="banner">
+                <h3 id="todoHeaderTitle">待办事项</h3>
+                <div class="inherit-buttons" role="group" aria-label="待办操作">
+                    <button class="inherit-btn" id="inheritBtn" aria-label="继承昨天待办">继承昨天待办</button>
+                    <button class="inherit-btn clear-btn" id="clearTodayBtn" aria-label="清除当天待办">清除当天待办</button>
+                </div>
+            </div>
+            <div class="todo-search" role="search">
+                <input type="text" id="todoSearchInput" placeholder="搜索待办内容或负责人..." aria-label="搜索待办">
+            </div>
+            <div class="todo-content" id="todoContent" role="list" aria-label="待办列表"></div>
+        </div>
+        
+        <div class="sidebar" id="sidebar" role="complementary" aria-label="待办管理面板">
+            <button class="toggle-btn toggle-sidebar" id="toggleSidebar" title="隐藏管理面板" aria-label="切换管理面板显示">▶</button>
+            <div class="sidebar-content">
+                <div class="sidebar-header">
+                    <h2>待办管理</h2>
+                    <button class="test-cloud-btn" id="testCloudBtn" title="测试云开发连接">☁️</button>
+                </div>
+                
+                <div class="filter-section collapsed" id="categoryFilterSection" role="region" aria-label="分类筛选">
+                    <div class="filter-header" onclick="App.toggleFilter('categoryFilterSection')" role="button" tabindex="0" aria-expanded="false" aria-controls="categoryFilterContent">
+                        <h3>分类筛选</h3>
+                        <span class="filter-toggle-icon" aria-hidden="true">▼</span>
+                    </div>
+                    <div class="filter-content" id="categoryFilterContent">
+                        <select id="categoryFilter" aria-label="选择分类">
+                            <option value="all">全部分类</option>
+                        </select>
+                        <button class="manage-btn" id="manageCategoryBtn">管理分类</button>
+                    </div>
+                </div>
+                
+                <div class="filter-section collapsed" id="responsibleFilterSection">
+                    <div class="filter-header" onclick="App.toggleFilter('responsibleFilterSection')">
+                        <h3>责任人筛选</h3>
+                        <span class="filter-toggle-icon">▼</span>
+                    </div>
+                    <div class="filter-content">
+                        <select id="responsibleFilter">
+                            <option value="all">全部责任人</option>
+                        </select>
+                        <button class="manage-btn" id="manageResponsibleBtn">管理责任人</button>
+                    </div>
+                </div>
+                
+                <div class="quick-add-section">
+                    <h3>快速添加待办</h3>
+                    <div class="quick-add-form">
+                        <textarea id="quickAddTitle" placeholder="输入待办内容，回车添加..." class="quick-input" rows="2"></textarea>
+                        <div class="quick-options">
+                            <select id="quickType" class="quick-select">
+                                <option value="">选择动作</option>
+                                <option value="check">检查</option>
+                                <option value="feedback">反馈</option>
+                            </select>
+                            <select id="quickCategory" class="quick-select"></select>
+                            <div class="multi-select-container compact" id="quickResponsibleContainer">
+                                <div class="multi-select-display" id="quickResponsibleDisplay">
+                                    <span class="placeholder">责任人</span>
+                                </div>
+                                <div class="multi-select-dropdown" id="quickResponsibleDropdown"></div>
+                            </div>
+                            <input type="hidden" id="quickResponsible" value="">
+                            <select id="quickPriority" class="quick-select">
+                                <option value="normal">普通</option>
+                                <option value="urgent">重要</option>
+                            </select>
+                            <input type="date" id="quickDueDate" class="quick-date" placeholder="完成日期">
+                            <input type="time" id="quickTime" class="quick-time" placeholder="时间">
+                        </div>
+                        <div class="quick-actions">
+                            <label class="reminder-label">
+                                <input type="checkbox" id="quickReminder">
+                                <span>提醒</span>
+                            </label>
+                            <button class="quick-add-btn" id="quickAddBtn">添加</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="data-management-section">
+                    <h3>数据管理</h3>
+                    <div class="storage-info">
+                        <div class="storage-status" id="storageStatus">
+                            <span class="status-indicator"></span>
+                            <span class="status-text">使用浏览器存储</span>
+                        </div>
+                        <p class="storage-hint" id="storageHint">建议选择文件存储，防止数据丢失</p>
+                    </div>
+                    <div class="data-management-buttons">
+                        <button class="data-btn primary" id="selectFileBtn" title="选择本地文件进行实时存储（推荐）">
+                            <span class="data-btn-icon">📁</span>
+                            <span>选择存储文件</span>
+                        </button>
+                        <button class="data-btn" id="exportDataBtn" title="导出数据到本地文件">
+                            <span class="data-btn-icon">📤</span>
+                            <span>导出数据</span>
+                        </button>
+                        <button class="data-btn" id="importDataBtn" title="从本地文件导入数据">
+                            <span class="data-btn-icon">📥</span>
+                            <span>导入数据</span>
+                        </button>
+                    </div>
+                    <input type="file" id="importFileInput" accept=".json" style="display: none;">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="todoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">添加待办</h3>
+                <button class="close-btn" id="closeTodoModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="todoForm">
+                    <input type="hidden" id="todoId">
+                    <div class="form-group">
+                        <input type="text" id="todoTitle" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>动作</label>
+                            <select id="todoType">
+                                <option value="">选择动作</option>
+                                <option value="check">检查</option>
+                                <option value="feedback">反馈</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>分类</label>
+                            <select id="todoCategory"></select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>责任人（可多选）</label>
+                            <div class="multi-select-container" id="todoResponsibleContainer">
+                                <div class="multi-select-display" id="todoResponsibleDisplay">
+                                    <span class="placeholder">选择责任人</span>
+                                </div>
+                                <div class="multi-select-dropdown" id="todoResponsibleDropdown"></div>
+                            </div>
+                            <input type="hidden" id="todoResponsible" value="">
+                        </div>
+                        <div class="form-group">
+                            <label>优先级</label>
+                            <select id="todoPriority">
+                                <option value="normal">普通</option>
+                                <option value="urgent">重要</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>待办日期</label>
+                            <input type="date" id="todoDate" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>完成日期</label>
+                            <input type="date" id="todoDueDate">
+                        </div>
+                        <div class="form-group">
+                            <label>完成时间</label>
+                            <input type="time" id="todoTime">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input type="checkbox" id="todoReminder">
+                            启用提醒
+                        </label>
+                    </div>
+                    <div class="form-group" id="reminderTimeGroup" style="display:none;">
+                        <label>提前提醒时间(分钟)</label>
+                        <input type="number" id="todoReminderTime" min="1" value="30">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">保存</button>
+                        <button type="button" class="cancel-btn" id="cancelTodoBtn">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="responsibleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>责任人管理</h3>
+                <button class="close-btn" id="closeResponsibleModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="add-form">
+                    <input type="text" id="newResponsibleName" placeholder="姓名">
+                    <input type="text" id="newResponsiblePosition" placeholder="职位">
+                    <button class="add-btn" id="addResponsibleBtn">添加</button>
+                </div>
+                <div class="list-container" id="responsibleList"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="categoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>分类管理</h3>
+                <button class="close-btn" id="closeCategoryModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="add-form">
+                    <input type="text" id="newCategoryName" placeholder="分类名称">
+                    <input type="color" id="newCategoryColor" value="#4CAF50">
+                    <button class="add-btn" id="addCategoryBtn">添加</button>
+                </div>
+                <div class="list-container" id="categoryList"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="editResponsibleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>编辑负责人</h3>
+                <button class="close-btn" id="closeEditResponsibleModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editResponsibleForm">
+                    <input type="hidden" id="editResponsibleId">
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <input type="text" id="editResponsibleName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>职位</label>
+                        <input type="text" id="editResponsiblePosition">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">保存</button>
+                        <button type="button" class="cancel-btn" id="cancelEditResponsibleBtn">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="editCategoryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>编辑分类</h3>
+                <button class="close-btn" id="closeEditCategoryModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editCategoryForm">
+                    <input type="hidden" id="editCategoryId">
+                    <div class="form-group">
+                        <label>分类名称</label>
+                        <input type="text" id="editCategoryName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>分类颜色</label>
+                        <div class="color-picker-wrapper">
+                            <input type="color" id="editCategoryColor">
+                            <div class="color-preview" id="colorPreview"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">保存</button>
+                        <button type="button" class="cancel-btn" id="cancelEditCategoryBtn">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmTitle">确认操作</h3>
+                <button class="close-btn" id="closeConfirmModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage"></p>
+                <div class="form-actions">
+                    <button class="cancel-btn" id="confirmCancelBtn">取消</button>
+                    <button class="submit-btn" id="confirmOkBtn">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/filesystem.js"></script>
+    <script src="js/multiselect.js"></script>
+    <script src="js/customselect.js"></script>
+    <script src="js/timeselect.js"></script>
+    <script src="js/iosmodal.js"></script>
+    <script src="js/bmob.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/responsible.js"></script>
+    <script src="js/todo.js"></script>
+    <script src="js/reminder.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
