@@ -13,6 +13,7 @@
     <!-- 设备检测和自动跳转 -->
     <script>
         (function() {
+            // 防止无限循环：如果URL中有view=mobile参数，就不跳转
             const urlParams = new URLSearchParams(window.location.search);
             const forceView = urlParams.get('view');
             
@@ -23,6 +24,13 @@
             if (forceView === 'pc') {
                 const pcUrl = window.location.pathname.replace('mobile.html', 'index.html');
                 window.location.href = pcUrl;
+                return;
+            }
+            
+            // 检查是否是从index.html跳转过来的（防止无限循环）
+            const referrer = document.referrer;
+            if (referrer && referrer.includes('index.html')) {
+                // 如果是从index.html跳转过来的，就不再跳转
                 return;
             }
             
