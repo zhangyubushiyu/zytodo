@@ -253,7 +253,7 @@ const MobileApp = {
         const today = new Date();
         const isToday = this.selectedDate.toDateString() === today.toDateString();
         
-        const options = { month: 'long', day: 'numeric', weekday: 'short' };
+        const options = { month: 'long', day: 'numeric' };
         const dateText = isToday ? '今天' : this.selectedDate.toLocaleDateString('zh-CN', options);
         
         document.getElementById('selectedDateText').textContent = dateText;
