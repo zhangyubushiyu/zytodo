@@ -10,60 +10,6 @@
     <title>待办管理 - 移动端</title>
     <link rel="stylesheet" href="css/mobile.css">
     <script src="https://unpkg.com/hydrogen-js-sdk@2.2.1/dist/Bmob-2.2.1.min.js"></script>
-    <!-- 设备检测和自动跳转 -->
-    <script>
-        (function() {
-            console.log('=== mobile.html 设备检测开始 ===');
-            
-            // 防止无限循环：如果URL中有view=mobile参数，就不跳转
-            const urlParams = new URLSearchParams(window.location.search);
-            const forceView = urlParams.get('view');
-            
-            console.log('forceView:', forceView);
-            
-            if (forceView === 'mobile') {
-                console.log('forceView === mobile，不跳转');
-                return;
-            }
-            
-            if (forceView === 'pc') {
-                const pcUrl = window.location.pathname.replace('mobile.html', 'index.html');
-                console.log('forceView === pc，跳转到:', pcUrl);
-                window.location.href = pcUrl;
-                return;
-            }
-            
-            // 检查是否是从index.html跳转过来的（防止无限循环）
-            // 使用sessionStorage记录跳转状态
-            const fromIndex = sessionStorage.getItem('fromIndex');
-            console.log('fromIndex:', fromIndex);
-            
-            if (fromIndex) {
-                console.log('检测到fromIndex标记，移除标记并不跳转');
-                sessionStorage.removeItem('fromIndex');
-                return;
-            }
-            
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                            window.innerWidth <= 768;
-            
-            console.log('isMobile:', isMobile);
-            console.log('navigator.userAgent:', navigator.userAgent);
-            console.log('window.innerWidth:', window.innerWidth);
-            
-            if (!isMobile) {
-                console.log('不是移动设备，设置fromMobile标记并跳转到PC页面');
-                sessionStorage.setItem('fromMobile', 'true');
-                const pcUrl = window.location.pathname.replace('mobile.html', 'index.html');
-                console.log('跳转到:', pcUrl);
-                window.location.href = pcUrl;
-            } else {
-                console.log('是移动设备，不跳转');
-            }
-            
-            console.log('=== mobile.html 设备检测结束 ===');
-        })();
-    </script>
 </head>
 <body>
     <div class="mobile-container">
