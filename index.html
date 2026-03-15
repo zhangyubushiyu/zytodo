@@ -7,6 +7,34 @@
     <meta name="theme-color" content="#007AFF">
     <title>团队待办管理系统</title>
     <link rel="stylesheet" href="css/style.css">
+    <!-- 引入Bmob SDK -->
+    <script src="https://unpkg.com/hydrogen-js-sdk@2.2.1/dist/Bmob-2.2.1.min.js"></script>
+    <!-- 设备检测和自动跳转 -->
+    <script>
+        (function() {
+            // 检查是否已经跳转过（避免无限循环）
+            const hasRedirected = localStorage.getItem('hasRedirected');
+            
+            // 如果已经跳转过，就清除标记并不再跳转
+            if (hasRedirected) {
+                localStorage.removeItem('hasRedirected');
+                return;
+            }
+            
+            // 检测是否是移动设备
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                            window.innerWidth <= 768;
+            
+            // 如果是移动设备，跳转到mobile.html
+            if (isMobile) {
+                // 设置跳转标记
+                localStorage.setItem('hasRedirected', 'true');
+                // 跳转到mobile.html
+                const mobileUrl = window.location.href.replace('index.html', 'mobile.html').replace(/\/$/, '/mobile.html');
+                window.location.href = mobileUrl;
+            }
+        })();
+    </script>
 </head>
 <body role="application">
     <div class="container" role="main">
