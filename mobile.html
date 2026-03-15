@@ -13,9 +13,17 @@
 </head>
 <body>
     <div class="mobile-container">
-        <header class="mobile-header">
-            <h1 id="pageTitle">待办事项</h1>
-        </header>
+        <nav class="mobile-nav">
+            <button class="nav-item" data-page="calendarPage">
+                <span class="nav-text">日历</span>
+            </button>
+            <button class="nav-item" data-page="todoPage">
+                <span class="nav-text">待办</span>
+            </button>
+            <button class="nav-item" data-page="managePage">
+                <span class="nav-text">管理</span>
+            </button>
+        </nav>
         
         <main class="mobile-content" id="mobileContent">
             <div class="page active" id="todoPage">
@@ -161,18 +169,6 @@
                 </div>
             </div>
         </main>
-        
-        <nav class="mobile-nav">
-            <button class="nav-item" data-page="calendarPage">
-                <span class="nav-text">日历</span>
-            </button>
-            <button class="nav-item" data-page="todoPage">
-                <span class="nav-text">待办</span>
-            </button>
-            <button class="nav-item" data-page="managePage">
-                <span class="nav-text">管理</span>
-            </button>
-        </nav>
         
         <button class="floating-add-btn" id="floatingAddBtn">+</button>
     </div>
