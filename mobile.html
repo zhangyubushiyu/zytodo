@@ -28,9 +28,9 @@
             }
             
             // 检查是否是从index.html跳转过来的（防止无限循环）
-            const referrer = document.referrer;
-            if (referrer && referrer.includes('index.html')) {
-                // 如果是从index.html跳转过来的，就不再跳转
+            // 使用sessionStorage记录跳转状态
+            if (sessionStorage.getItem('fromIndex')) {
+                sessionStorage.removeItem('fromIndex');
                 return;
             }
             
@@ -38,6 +38,7 @@
                             window.innerWidth <= 768;
             
             if (!isMobile) {
+                sessionStorage.setItem('fromMobile', 'true');
                 const pcUrl = window.location.pathname.replace('mobile.html', 'index.html');
                 window.location.href = pcUrl;
             }
