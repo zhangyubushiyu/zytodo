@@ -83,7 +83,7 @@ const BmobService = {
             const todo = await query.get(id);
             const reservedFields = ['createdAt', 'updatedAt', 'objectId'];
             Object.keys(updates).forEach(key => {
-                if (updates[key] !== undefined && !reservedFields.includes(key)) {
+                if (updates[key] !== undefined && updates[key] !== null && !reservedFields.includes(key)) {
                     todo.set(key, updates[key]);
                 }
             });
