@@ -418,6 +418,9 @@ const TodoManager = {
         confirmMessage += '\n\n是否继续？';
         
         App.confirm('确认继承', confirmMessage, async () => {
+            let successCount = 0;
+            let failCount = 0;
+            
             for (const todo of todosToInherit) {
                 let newDate = selectedDate;
                 if (todo.date) {
@@ -443,10 +446,19 @@ const TodoManager = {
                 delete newTodo.id;
                 delete newTodo.createdAt;
                 delete newTodo.updatedAt;
-                await Storage.addTodo(newTodo);
+                
+                const result = await Storage.addTodo(newTodo);
+                if (result) {
+                    successCount++;
+                } else {
+                    failCount++;
+                }
             }
             
-            let successMessage = `已继承${todosToInherit.length}个待办事项`;
+            let successMessage = `已继承${successCount}个待办事项`;
+            if (failCount > 0) {
+                successMessage += `，失败${failCount}个`;
+            }
             if (duplicateTodos.length > 0) {
                 successMessage += `，跳过${duplicateTodos.length}个重复待办`;
             }
